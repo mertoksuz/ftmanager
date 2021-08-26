@@ -11,10 +11,10 @@ You can list leagues and manage teams belongs that leagues. Manager gives you ab
 # How to Run ?
 
 If requires
-`chmod +x ./deploy/run.sh` and just type and enter `./deploy/run.sh`
+`chmod +x ./deploy/run.sh` and just type and enter -> `./deploy/run.sh`
 
 # How to Run Tests ?
-
-`chmod +x ./run-tests.sh` and just type and enter `./run-tests.sh`
+If requires
+`chmod +x ./run-tests.sh` and just type and enter -> `./run-tests.sh`
 
 _Thanks for read and check._
