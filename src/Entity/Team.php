@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\TeamRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Inflector\Inflector;
+use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
@@ -11,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Team
 {
     /**
+     * @Groups("team")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -18,16 +22,19 @@ class Team
     private $id;
 
     /**
+     * @Groups({"team", "league"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups({"team", "league"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $strip;
 
     /**
+     * @Groups("team")
      * @ORM\ManyToOne(targetEntity=League::class, inversedBy="teams")
      */
     private $league;
@@ -69,6 +76,17 @@ class Team
     public function setLeague(?League $league): self
     {
         $this->league = $league;
+
+        return $this;
+    }
+
+    public function exchangeData($params) {
+
+        foreach ($params as $k => $p) {
+            if (property_exists($this, $k)) {
+                $this->{'set'.ucfirst($k)}($p);
+            }
+        }
 
         return $this;
     }

@@ -1,7 +1,6 @@
 <?php
 namespace App\Listener;
 
-use App\Exception\InvalidJWTException;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +22,7 @@ class ExceptionListener
 
         $response = new JsonResponse();
         $response->setStatusCode($statusCode);
-        $message = json_encode(['error' => $throwable->getMessage()]);
+        $message = json_encode(['data' => null, 'error' => $throwable->getMessage()]);
         $response->setContent($message);
         $this->logger->info($message);
 

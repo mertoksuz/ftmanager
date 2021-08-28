@@ -14,7 +14,23 @@ If requires
 `chmod +x ./deploy/run.sh` and just type and enter -> `./deploy/run.sh`
 
 # How to Run Tests ?
-If requires
-`chmod +x ./run-tests.sh` and just type and enter -> `./run-tests.sh`
+`./vendor/bin/phpunit`
+
+
+# Run Migrations 
+`docker exec -it php bin/console doctrine:migrations:migrate`
+
+Migrations will provide sample User, Team and League data.
+
+# Sample Login
+
+You can use below data in request body as JSON to get a JWT Token
+
+`
+{
+"username": "mert",
+"password": "mert"
+}
+`
 
 _Thanks for read and check._

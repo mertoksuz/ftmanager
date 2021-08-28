@@ -2,11 +2,13 @@
 namespace App\Controller;
 
 use App\Service\TeamService ;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TeamController extends AbstractController
+class TeamController extends BaseController
 {
     /** @var TeamService */
     private $teamService;
@@ -22,23 +24,54 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/api/teams", name="teams_index", methods={"GET"})
+     * @param Request $request
+     * @return Response
      */
-    public function index(): JsonResponse
+    public function index(Request $request): Response
     {
-        $teams = $this->teamService->getTeams();
+        $filters = $request->query->all();
 
-        return new JsonResponse(['error' => false, 'data' => $teams]);
+        $teams = $this->teamService->getTeams($filters);
+
+        return $this->response($teams, ['team']);
     }
 
     /**
-     * @Route("/api/teams/{league}", name="teams_read", methods={"GET"})
-     * @param int $league League ID
+     * @Route("/api/teams/{team}", name="teams_read", methods={"GET"})
+     * @param int $team
      * @return JsonResponse
      */
-    public function read(int $league): JsonResponse
+    public function read(int $team): Response
     {
-        $leagues = $this->teamService->getTeamsByLeague($league);
+        $teams = $this->teamService->getTeam($team);
 
-        return new JsonResponse(['error' => false, 'data' => $leagues]);
+        return $this->response($teams, ['team']);
+    }
+
+    /**
+     * @Route("/api/teams/{team}", name="teams_update", methods={"PUT"})
+     * @param int $team Team ID
+     * @param RequestStack $requestStack
+     * @return JsonResponse
+     */
+    public function update(int $team, RequestStack $requestStack): Response
+    {
+        $requestBody = json_decode($requestStack->getMainRequest()->getContent(), true);
+
+        $team = $this->teamService->updateTeam($team, $requestBody);
+
+        return $this->response($team, ['team']);
+    }
+
+    /**
+     * @Route("/api/teams/{team}", name="teams_delete", methods={"DELETE"})
+     * @param int $team
+     * @return JsonResponse
+     */
+    public function delete(int $team): Response
+    {
+        $this->teamService->removeTeam($team);
+
+        return $this->response([], [], null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\LeagueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=LeagueRepository::class)
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class League
 {
     /**
+     * @Groups({"team", "league"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,11 +22,13 @@ class League
     private $id;
 
     /**
+     * @Groups({"team", "league"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups({"league"})
      * @ORM\OneToMany(targetEntity=Team::class, mappedBy="league")
      */
     private $teams;

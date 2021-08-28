@@ -2,11 +2,9 @@
 namespace App\Controller;
 
 use App\Service\LeagueService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LeagueController extends AbstractController
+class LeagueController extends BaseController
 {
     /** @var LeagueService */
     private $leagueService;
@@ -27,6 +25,6 @@ class LeagueController extends AbstractController
     {
         $leagues = $this->leagueService->getLeagues();
 
-        return new JsonResponse(['error' => false, 'data' => $leagues]);
+        return $this->response($leagues, ['league']);
     }
 }
